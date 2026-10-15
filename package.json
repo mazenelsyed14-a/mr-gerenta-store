@@ -2,13 +2,10 @@
   "name": "mr-gerenta-store",
   "version": "1.0.0",
   "description": "MR. GERENTA luxury watches and perfumes online store",
-  "main": "backend/server.js",
+  "main": "api/index.js",
   "scripts": {
     "start": "node backend/server.js",
-    "build": "cd backend && npm install"
-  },
-  "engines": {
-    "node": ">=18.0.0"
+    "build": "echo 'Ready for Vercel'"
   },
   "dependencies": {
     "cors": "^2.8.5",
