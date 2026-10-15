@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: mr-gerenta-store
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm install && cd backend && npm install
+    startCommand: node backend/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ADMIN_USER
+        value: mazen elsyed5060
+      - key: ADMIN_PASS
+        value: Mazen 3safra2523
+      - key: SESSION_SECRET
+        generateValue: true
