@@ -9,8 +9,10 @@ const { ADMIN_CONFIG, verifyCredentials, onlyOwner } = require("./auth");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const DB_FILE = path.join(__dirname, "products.json");
-const UPLOAD_DIR = path.join(__dirname, "upload");
+const IS_VERCEL = !!process.env.VERCEL;
+const ORIGINAL_DB = path.join(__dirname, "products.json");
+const DB_FILE = IS_VERCEL ? path.join("/tmp", "products.json") : ORIGINAL_DB;
+const UPLOAD_DIR = IS_VERCEL ? path.join("/tmp", "upload") : path.join(__dirname, "upload");
 
 // التأكد من وجود مجلد رفع الصور ومجلد قاعدة البيانات
 if (!fs.existsSync(UPLOAD_DIR)) {
@@ -21,8 +23,14 @@ if (!fs.existsSync(UPLOAD_DIR)) {
 function loadProducts() {
   try {
     if (!fs.existsSync(DB_FILE)) {
-      fs.writeFileSync(DB_FILE, JSON.stringify([], null, 2), "utf8");
-      return [];
+      let initialData = [];
+      if (fs.existsSync(ORIGINAL_DB)) {
+        try {
+          initialData = JSON.parse(fs.readFileSync(ORIGINAL_DB, "utf8"));
+        } catch (e) {}
+      }
+      fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2), "utf8");
+      return initialData;
     }
     const data = fs.readFileSync(DB_FILE, "utf8");
     return data ? JSON.parse(data) : [];
@@ -271,10 +279,14 @@ app.use((err, req, res, next) => {
 });
 
 // تشغيل السيرفر
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`====================================================`);
-  console.log(`🚀 خادم متجر mr.gerenta يعمل بنجاح!`);
-  console.log(`🌐 واجهة المتجر:       http://localhost:${PORT}`);
-  console.log(`👑 لوحة تحكم المالك:  http://localhost:${PORT}/admin.html`);
-  console.log(`====================================================`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`====================================================`);
+    console.log(`🚀 خادم متجر mr.gerenta يعمل بنجاح!`);
+    console.log(`🌐 واجهة المتجر:       http://localhost:${PORT}`);
+    console.log(`👑 لوحة تحكم المالك:  http://localhost:${PORT}/admin.html`);
+    console.log(`====================================================`);
+  });
+}
+
+module.exports = app;
