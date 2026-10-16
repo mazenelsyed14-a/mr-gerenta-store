@@ -439,7 +439,7 @@
         return;
       }
 
-      let orderText = `*طلب جديد من متجر mr.gerenta*\n\n`;
+      let orderText = `السلام عليكم ورحمة الله،\n*طلب جديد من متجر mr.gerenta*\n\n`;
       orderText += `👤 *اسم العميل:* ${name}\n`;
       orderText += `📞 *رقم الهاتف:* ${phone}\n`;
       orderText += `📍 *عنوان التوصيل:* ${address}\n\n`;
@@ -471,7 +471,7 @@
       const product = allProducts.find(p => String(p.id) === String(productId));
       if (!product) return;
 
-      const message = `مرحباً متجر *mr.gerenta*،\nأود طلب المنتج التالي:\n- *الاسم:* ${product.name}\n- *القسم:* ${product.category || 'عام'}\n- *السعر:* ${Number(product.price).toLocaleString()} جنيه\n\nأرجو تزويدي بتفاصيل التوصيل والميعاد المتاح. شكراً!`;
+      const message = `السلام عليكم،\nأود طلب المنتج التالي من متجر *mr.gerenta*:\n- *الاسم:* ${product.name}\n- *القسم:* ${product.category || 'عام'}\n- *السعر:* ${Number(product.price).toLocaleString()} جنيه\n\nأرجو تزويدي بتفاصيل التوصيل والميعاد المتاح. شكراً!`;
       const encodedUrl = `https://wa.me/${STORE_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
       window.open(encodedUrl, "_blank");
     }
